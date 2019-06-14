@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Launch VNC Workspace
+Comment=Start VNC server at 5901 and launch VNC Viewer
+Exec=/home/cheshi/bin/launch-vnc.sh
+Icon=tigervnc
+Terminal=false
+Type=Application
+StartupWMClass=TigerVNC Viewer: Connection Details
+Categories=Network;RemoteAccess;
