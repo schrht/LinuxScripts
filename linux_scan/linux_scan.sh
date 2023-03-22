@@ -2,28 +2,27 @@
 
 # Name: linux_scan.sh
 #
-# Description: 
-#   A Linux script that gathers system information by running various Linux commands. 
-#   The script requires root privileges to run some of the commands. Once the information 
-#   is collected, it is saved into a tarball which can be used for further analysis or troubleshooting. 
-#   The script is designed to provide a comprehensive overview of the system, including information 
-#   about the hardware, operating system, network, and installed software. 
-#   It is a useful tool for system administrators and users who want to understand the configuration 
+# Description:
+#   A Linux script that gathers system information by running various Linux commands.
+#   The script requires root privileges to run some of the commands. Once the information
+#   is collected, it is saved into a tarball which can be used for further analysis or troubleshooting.
+#   The script is designed to provide a comprehensive overview of the system, including information
+#   about the hardware, operating system, network, and installed software.
+#   It is a useful tool for system administrators and users who want to understand the configuration
 #   and performance of their Linux system.
 #
-# Usage: 
+# Usage:
 #   To run the script, execute the following command:
 #   ./linux_scan.sh
-#   The script requires root privileges to run some of the commands, so make sure to run it as root 
-#   or with sudo privileges. Once the script completes, the system information will be saved into 
+#   The script requires root privileges to run some of the commands, so make sure to run it as root
+#   or with sudo privileges. Once the script completes, the system information will be saved into
 #   a tarball which can be found in the current directory.
 #
 # Maintainer: Charles Shi <schrht@gmail.com>
 # Version: 1.0.0
 # Update Date: 2023-03-16
 
-
-function run_cmd(){
+function run_cmd() {
 	# $1: Command to be executed
 	# $2: The filename where log to be saved (optional)
 
@@ -36,17 +35,17 @@ function run_cmd(){
 		cmdlog=$workspace/$2
 	fi
 
-	echo -e "\ncmd> $cmd" >> $logfile
-	echo -e "log> $cmdlog[.err]" >> $logfile
-	eval $cmd > $cmdlog 2> $cmdlog.err
-	
+	echo -e "\ncmd> $cmd" >>$logfile
+	echo -e "log> $cmdlog[.err]" >>$logfile
+	eval $cmd >$cmdlog 2>$cmdlog.err
+
 	rcode=$?
 	if [ $rcode != 0 ]; then
 		echo -e "\ncmd> $cmd"
 		cat $cmdlog.err
-    fi
+	fi
 
-    return $rcode
+	return $rcode
 }
 
 export PATH=$PATH:/usr/local/sbin:/usr/sbin
@@ -56,13 +55,13 @@ workspace=linux_scan_$(hostname)_$(date +%y%m%d%H%M%S)
 logfile=$workspace/linux_scan.log
 mkdir -p $workspace
 
-echo -e "\n\nInstallation:\n===============\n" >> $logfile
+echo -e "\n\nInstallation:\n===============\n" >>$logfile
 
 # Install essential tools
 #sudo dnf install sysstat -y &>> $logfile
 #sudo dnf install redhat-lsb -y &>> $logfile
 
-echo -e "\n\nTest Results:\n===============\n" >> $logfile
+echo -e "\n\nTest Results:\n===============\n" >>$logfile
 
 # Start taking snapshot
 
@@ -291,7 +290,7 @@ done
 ## boot
 ## Waiting for Bootup finished
 while [[ "$(sudo systemd-analyze time 2>&1)" =~ "Bootup is not yet finished" ]]; do
-	echo "[$(date)] Bootup is not yet finished." >> $logfile
+	echo "[$(date)] Bootup is not yet finished." >>$logfile
 	sleep 2s
 done
 run_cmd 'systemd-analyze time'
@@ -311,4 +310,3 @@ echo
 echo "Log files have been generated in '$workspace' and more details can be found in '$logfile'."
 
 exit 0
-
