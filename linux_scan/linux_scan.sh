@@ -19,8 +19,8 @@
 #   a tarball which can be found in the current directory.
 #
 # Maintainer: Charles Shi <schrht@gmail.com>
-# Version: 1.0.0
-# Update Date: 2023-03-16
+# Version: 1.1.0
+# Update Date: 2023-03-22
 
 function run_cmd() {
 	# $1: Command to be executed
@@ -241,6 +241,7 @@ run_cmd 'cloud-id'
 
 ## selinux
 run_cmd 'getenforce'
+run_cmd 'sestatus'
 
 ## others
 run_cmd 'cat /proc/buddyinfo'
@@ -280,12 +281,21 @@ run_cmd 'cat /proc/vmstat'
 
 ## ostree
 run_cmd 'stat /run/ostree-booted'
+run_cmd 'ostree admin status'
+run_cmd 'ostree admin status --verbose'
+run_cmd 'rpm-ostree status'
 
 ## Vulnerablilities files check
 run_cmd 'ls /sys/devices/system/cpu/vulnerabilities/'
 for file in $(ls /sys/devices/system/cpu/vulnerabilities/*); do
 	run_cmd "grep ^ $file"
 done
+
+## Tuned
+run_cmd 'tuned-adm list'
+run_cmd 'tuned-adm active'
+run_cmd 'tuned-adm --verbose active'
+run_cmd 'tuned-adm recommend'
 
 ## boot
 ## Waiting for Bootup finished
